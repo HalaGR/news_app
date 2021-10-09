@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html dir="rtl" lang="he">
 <style>
 table,th,td {
   border : 1px solid black;
   border-collapse: collapse;
 }
 th,td {
-  padding: 5px;
+  padding: 10px;
 }
 </style>
 <head>
@@ -23,20 +23,31 @@ function loadXMLDoc() {
   const xhttp = new XMLHttpRequest();
   xhttp.onload = function() {
     const xmlDoc = xhttp.responseXML;
-    const cd = xmlDoc.getElementsByTagName("CD");
-    myFunction(cd)
+    const items = xmlDoc.getElementsByTagName("item");
+    myFunction(items)
   }
-  xhttp.open("GET", "/static/cd_catalog.xml");
+  xhttp.open("GET", "/static/file.xml");
   xhttp.send();
 }
 
-function myFunction(cd) {
-  let table="<tr><th>Title</th><th>Artist</th></tr>";
-  for (let i = 0; i < cd.length; i++) { 
+function myFunction(item) {
+  let table="<tr><th>title</th><th>description</th><th>link</th><th>pubDate</th><th>guid</th><th>tags</th></tr>";
+  for (let i = 0; i < item.length; i++) { 
     table += "<tr><td>" +
-    cd[i].getElementsByTagName("TITLE")[0].childNodes[0].nodeValue +
+    item[i].getElementsByTagName("title")[0].childNodes[0].nodeValue +
     "</td><td>" +
-    cd[i].getElementsByTagName("ARTIST")[0].childNodes[0].nodeValue +
+    item[i].getElementsByTagName("description")[0].childNodes[0].nodeValue +
+    "</td><td>"
+    +
+    item[i].getElementsByTagName("link")[0].childNodes[0].nodeValue +
+    "</td><td>"
+    +
+    item[i].getElementsByTagName("pubDate")[0].childNodes[0].nodeValue +
+    "</td><td>"
+    +
+    item[i].getElementsByTagName("guid")[0].childNodes[0].nodeValue +
+    "</td><td>" +
+    item[i].getElementsByTagName("tags")[0].childNodes[0].nodeValue +
     "</td></tr>";
   }
   document.getElementById("demo").innerHTML = table;
