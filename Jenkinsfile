@@ -5,7 +5,7 @@ pipeline {
 		stages {
 		    stage("kill if still running"){
 		        steps{
-		            sh 'jps | grep app | awk \'{print "kill -9" $1}\' | bash -x | true'
+		            sh 'jps | grep app | awk \'{print "kill -9" $1}\' | bash -x | true' //if app still running kill it
 		        }
 		    }
 		
@@ -18,15 +18,13 @@ pipeline {
 			}
 			stage("Build"){
 			    steps{
-			       // sh 'python3 -v'
 				   sh 'pip3 install -r requirements.txt'
-				   //sh 'nohub python3 app.py &'
-				   sh 'JENKINS_NODE_COOKIE=dontKillMe nohup python3 app.py &'
+				   sh 'JENKINS_NODE_COOKIE=dontKillMe nohup python3 app.py &' //run app in BG
 			    }
 			}
 			stage("send slack"){
 			    steps{
-			        slackSend channel: 'jenkins', message: 'hello from jenkins!!', teamDomain: 'forsa-hq', tokenCredentialId: 'slack'
+			        slackSend channel: 'jenkins', message: 'hello from jenkins!!', teamDomain: 'forsa-hq', tokenCredentialId: 'slack' // send message when built 
 			
 			    }
 			}
