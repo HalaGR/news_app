@@ -21,7 +21,13 @@ pipeline {
 			       // sh 'python3 -v'
 				   sh 'pip3 install -r requirements.txt'
 				   //sh 'nohub python3 app.py &'
-				   sh 'BUILD_ID=dontKillMe nohup python3 app.py &'
+				   sh 'JENKINS_NODE_COOKIE=dontKillMe nohup python3 app.py &'
+			    }
+			}
+			stage("send slack"){
+			    steps{
+			        slackSend channel: 'jenkins', message: 'hello from jenkins!!', teamDomain: 'forsa-hq', tokenCredentialId: 'slack'
+			
 			    }
 			}
         }
