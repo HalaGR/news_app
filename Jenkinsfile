@@ -3,6 +3,11 @@ pipeline {
 	agent any //run code with agent slave
 		
 		stages {
+		    stage("kill if still running"){
+		        steps{
+		            sh 'jps | grep app | awk \'{print "kill -9" $1}\' | bash -x | true'
+		        }
+		    }
 		
 			stage("clone") { // stage Build
 			
@@ -13,11 +18,13 @@ pipeline {
 			}
 			stage("Build"){
 			    steps{
-                    sh "pip install -r requirements.txt"
-				    sh "python app.py"
+			       // sh 'python3 -v'
+				   sh 'pip3 install -r requirements.txt'
+				   //sh 'nohub python3 app.py &'
+				   sh 'BUILD_ID=dontKillMe nohup python3 app.py &'
 			    }
 			}
         }
 
 			
-    }
+}
